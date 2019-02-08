@@ -1,0 +1,42 @@
+{% extends 'FreedAM_app/templates/FreedAM_app/base.html' %}
+
+{% load static %}
+{% block pagetitle %}FreedAM{% endblock pagetitle %}
+
+{% block content %}
+
+<!--     <header class="masthead mb-3" style="background-image: url('/static/images/kuschchamp_cv01_alu-85-frame-ivory-white-with-cps-artic-blue_18804981726_o.jpg')">
+      <div class="container d-flex h-100 align-items-center">
+        <div class="text-center float-left">
+          <h1 class="mx-auto my-0 text-dark">FreedAM Calculator</h1>
+          <a href="#form" class="btn btn-primary js-scroll-trigger">Get Started</a>
+        </div>
+      </div>
+    </header> -->
+
+<center>
+  <h1 class="mx-auto my-0 text-dark">FreedAM Calculator</h1>
+    <section id="form" class="mt-5">
+      <div class="container">
+      	<h2>Enter some measurements to get started</h2>
+        	<form action="">
+        		<table class="table">
+        			{{frame_input_form.as_table}}
+        		</table>
+        	<input type="submit" class="btn btn-success">
+        	</form>
+
+      </div>
+    </section>
+</center>
+{% endblock content %}
+{% block bottom %}
+
+{{block.super}}
+<script>
+  AOS.init();
+</script>
+<script type="text/javascript">
+  !function(e){"use strict";e('a.js-scroll-trigger[href*="#"]:not([href="#"])').click(function(){if(location.pathname.replace(/^\//,"")==this.pathname.replace(/^\//,"")&&location.hostname==this.hostname){var a=e(this.hash);if((a=a.length?a:e("[name="+this.hash.slice(1)+"]")).length)return e("html, body").animate({scrollTop:a.offset().top-70},1e3,"easeInOutExpo"),!1}}),e(".js-scroll-trigger").click(function(){e(".navbar-collapse").collapse("hide")}),e("body").scrollspy({target:"#mainNav",offset:100});var a=function(){100<e("#mainNav").offset().top?e("#mainNav").addClass("navbar-shrink"):e("#mainNav").removeClass("navbar-shrink")};a(),e(window).scroll(a)}(jQuery);
+</script>
+{% endblock bottom %}
