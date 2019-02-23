@@ -27,6 +27,8 @@ from django.db import IntegrityError
 from .forms import *
 from openpyxl import load_workbook
 import os
+import win32com.client
+from win32com.client import constants
 # Create your views here.
 
 
@@ -53,20 +55,65 @@ def calculator_home(request):
 	if frame_input_form.is_valid():
 		print "hoogabooga"
 		print frame_input_form.pub_date
+		os.chdir("C:/Users/asidawi/Desktop/personal_development/FreedAM")	
+		wb = load_workbook('Parameters.xlsx')
+		ws = wb['Sheet1']
+		ws['B2'] = frame_input_form.angle_lower_leg_upper_leg
+		ws['B3'] = frame_input_form.seating_angle	
+		ws['B4'] = frame_input_form.backrest_angle
+		ws['B5'] = frame_input_form.shoulder_height - frame_input_form.seat_height
+		ws['B6'] = frame_input_form.seat_depth
 
-	# os.chdir("C:/Users/asidawi/Documents/personal_development/FreedAM")	
-	# wb = load_workbook('Parametric_joint_angle.xlsx')
-	# ws = wb['Sheet1']
-	# ws['B2'] = '30'
-	# wb.save('Parametric_joint_angle.xlsx')	
+
+		#ws['B8'] = frame_input_form.backrest_angle
+		#ws['B8'] = frame_input_form.backrest_angle		
+		# vertical tubes calculated from seat height and seat_angle
+
+		ws['B9'] = frame_input_form.seat_depth		
+		ws['B10'] = frame_input_form.seat_width/2 - 20
+		ws['B10'] = frame_input_form.seat_width/2 - 20
+		ws['B14'] = frame_input_form.seat_width
+
+
+		wb.save('Parameters.xlsx')	
 	
 	context = {
 	   'frame_input_form': frame_input_form,
 	}
 	return HttpResponse(template.render(context, request))	
 
-# use standard upholstery sizes and compared seat width and length to that
+# seat_depth = buttock to knee measurement + 25mm
+# seat_width = hip breadth + 25mm
+
+
+# use standard upholstery sizes and compared seat width and length to that (6 standard sizes)
 # change angle of certain joints depending on tube lengths
+# On changing seat angle, vertical tube sizes have to be updated as well as inner joint angles
+# all calculations in python so minimal work done by inventor
 
 # after frame created proceed to select cushioning and armrest options
+
+
+#
+# import win32com.client
+# from win32com.client import gencache
+
+
+# oApp = win32com.client.Dispatch('Inventor.Application')
+# oApp.Visible = True
+# mod = gencache.EnsureModule('{D98A091D-3A0F-4C3E-B36E-61F62068D488}', 0, 1, 0)
+# oApp = mod.Application(oApp)
+# oApp.SilentOperation = True
+# oDoc = oApp.ActiveDocument
+# prop = oApp.ActiveDocument.PropertySets.Item("Design Tracking Properties")
+
+# # getting description and designer from iproperties (works)
+# Descrip = prop('Description').Value
+# Designer = prop('Designer').Value
+# print(Descrip)
+# print(Designer)
+
+# oAssDoc = oApp.Documents.Open('someassemblyfile.iam')
+# ThisApplication.ActiveView.Update()
+# save it
 

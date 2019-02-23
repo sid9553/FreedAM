@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
 from django.db import models
 from django.core.validators import MinValueValidator
 import datetime
@@ -22,25 +21,20 @@ class FrameDimensions(models.Model):
 
 	angle_lower_leg_upper_leg = models.IntegerField(validators=[MinValueValidator(1)])
 	backrest_angle = models.IntegerField(validators=[MinValueValidator(1)])	
+	# should be between 90 and 105
 	seating_angle = models.IntegerField(validators=[MinValueValidator(1)])	
-	seat_width = models.IntegerField(validators=[MinValueValidator(1)])
-	# enter as number then recommmend small,med,large
-	seat_depth = models.IntegerField(validators=[MinValueValidator(1)])
+	# should be between 75 and 90
+	seat_width = models.IntegerField(validators=[MinValueValidator(1)], verbose_name = "Hip breadth")
+	# enter as number then get closest standard size
+	seat_depth = models.IntegerField(validators=[MinValueValidator(1)], verbose_name = "Buttock to knee length")
 	seat_height = models.IntegerField(validators=[MinValueValidator(1)])
 	# seat height has to have max of 600mm
 	backrest_height = models.IntegerField(validators=[MinValueValidator(1)])
-	# 
-
+	shoulder_height = models.IntegerField(validators=[MinValueValidator(1)])
 	# centre_of_gravity (angle of main wheel to back support)
-	# armrest boolean
 	# back wheel boolean
-
-
-	# 
+	# must add help text/pictures
 	class Meta:
 		verbose_name ="Frame dimensions"
 	def __unicode__ (self):
 			return self.pub_date			
-
-	# hip_circumference = models.IntegerField(validators=[MinValueValidator(1)])
-	# thigh_circumference = models.IntegerField(validators=[MinValueValidator(1)])
