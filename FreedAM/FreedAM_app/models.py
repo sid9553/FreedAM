@@ -19,22 +19,21 @@ class Contact(models.Model):
 class FrameDimensions(models.Model):
 	pub_date = models.DateTimeField(default = datetime.datetime.now())
 
-	angle_lower_leg_upper_leg = models.IntegerField(validators=[MinValueValidator(1)])
-	backrest_angle = models.IntegerField(validators=[MinValueValidator(1)])	
+	angle_lower_leg_upper_leg = models.IntegerField()
+	backrest_angle = models.IntegerField()	
 	# should be between 90 and 105
-	seating_angle = models.IntegerField(validators=[MinValueValidator(1)])	
+	seating_angle = models.IntegerField()	
 	# should be between 75 and 90
-	seat_width = models.IntegerField(validators=[MinValueValidator(1)], verbose_name = "Hip breadth")
+	seat_width = models.IntegerField(verbose_name = "Hip breadth")
 	# enter as number then get closest standard size
-	seat_depth = models.IntegerField(validators=[MinValueValidator(1)], verbose_name = "Buttock to knee length")
-	seat_height = models.IntegerField(validators=[MinValueValidator(1)])
+	seat_depth = models.IntegerField(verbose_name = "Buttock to knee length")
+	seat_height = models.IntegerField()
 	# seat height has to have max of 600mm
-	backrest_height = models.IntegerField(validators=[MinValueValidator(1)])
-	shoulder_height = models.IntegerField(validators=[MinValueValidator(1)])
+	# backrest_height = models.IntegerField(validators=[MinValueValidator(1)])
+	shoulder_height = models.IntegerField()
 	# centre_of_gravity (angle of main wheel to back support)
 	# back wheel boolean
-	# must add help text/pictures
 	class Meta:
 		verbose_name ="Frame dimensions"
-	def __unicode__ (self):
+	def __str__ (self):
 			return self.pub_date			

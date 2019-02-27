@@ -19,15 +19,7 @@
     <section id="form" class="mt-5">
       <div class="container">
       	<h2>Enter some measurements to get started</h2>
-          {{form_errors}}
-          {{ frame_input_form.non_field_errors }}
-          {{ frame_input_form.field_name.errors }}                    
-          {{ frame_input_form.errors }} 
-          {{ frame_input_form.id }} 
-            {% for hidden in frame_input_form.hidden_fields %}
-                {{ hidden }}
-            {% endfor %}           
-        	<form method = 'POST' action="{% url 'FreedAM_app:calculator_home' %}"  enctype="multipart/form-data">{% csrf_token %}
+        	<form action="">
         		<table class="table">
         			{{frame_input_form.as_table}}
         		</table>
@@ -46,33 +38,5 @@
 </script>
 <script type="text/javascript">
   !function(e){"use strict";e('a.js-scroll-trigger[href*="#"]:not([href="#"])').click(function(){if(location.pathname.replace(/^\//,"")==this.pathname.replace(/^\//,"")&&location.hostname==this.hostname){var a=e(this.hash);if((a=a.length?a:e("[name="+this.hash.slice(1)+"]")).length)return e("html, body").animate({scrollTop:a.offset().top-70},1e3,"easeInOutExpo"),!1}}),e(".js-scroll-trigger").click(function(){e(".navbar-collapse").collapse("hide")}),e("body").scrollspy({target:"#mainNav",offset:100});var a=function(){100<e("#mainNav").offset().top?e("#mainNav").addClass("navbar-shrink"):e("#mainNav").removeClass("navbar-shrink")};a(),e(window).scroll(a)}(jQuery);
-</script>
-<script type="text/javascript">
-$(document).ready(function() { 
-    $(".errorlist" ).each(function( i ) {
-  console.log(this)
-     this.style.color = "red";
-     this.style.fontWeight = "bold";      
-      });  
-        function csrfSafeMethod(method) {
-        // these HTTP methods do not require CSRF protection
-        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-    }
-        function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie != '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = jQuery.trim(cookies[i]);
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue; 
-                }          
-});
 </script>
 {% endblock bottom %}

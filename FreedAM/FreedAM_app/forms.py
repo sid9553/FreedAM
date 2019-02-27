@@ -44,6 +44,6 @@ class FrameDimensionsForm(forms.ModelForm):
 		# 	'query': _('<b>This is the quantity of the above part number you would like to have built.<br> If you are unsure, please consult with manufacturing.<br>'),								
   #       }
 		def __init__(self, *args, **kwargs):
-			super(ContactForm, self).__init__(*args, **kwargs)
+			super(FrameDimensionsForm, self).__init__(*args, **kwargs)
 			for field in self.fields.values():
 				field.error_messages['required'] ='The field {fieldname} is required.'.format(fieldname=field.label)	
