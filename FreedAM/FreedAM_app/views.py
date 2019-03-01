@@ -31,6 +31,7 @@ import win32com.client
 import math
 from win32com.client import constants
 from win32com.client import gencache
+import pythoncom
 
 # Create your views here.
 
@@ -55,6 +56,40 @@ def projects(request):
 def calculator_home(request):
 	template = loader.get_template('FreedAM_app/templates/FreedAM_app/calculator_home.html')
 	frame_input_form = FrameDimensionsForm(request.POST or None)
+
+	pythoncom.CoInitialize()	
+	#Open Inventor
+	invApp = win32com.client.Dispatch("Inventor.Application")
+	# props = dir(invApp)
+	# for item in props:
+	# 	print item
+
+	#Make inventor visible
+	invApp.Visible = True
+	invApp.SilentOperation = True
+
+	# #Set file names of template
+	Assembly_name = 'C:/Users/asidawi/Desktop/CAD_testing/Frame_assembly - Working_on_constraints.iam'
+
+	# #Open the base model
+	oDoc=invApp.Documents.Open(Assembly_name)
+
+	# Update assembly
+	oDoc.Update()
+	oDoc.Save()
+
+	iLogicAddinGuid = "{3BDD8D79-2179-4B11-8A5A-257B1C0263AC}"
+	addin = invApp.ApplicationAddIns.ItemById(iLogicAddinGuid)
+	addin.Activate()
+	_iLogicAutomation = addin.Automation()
+	oCurrentDoc = invApp.ActiveDocument()
+	#rule_list = _iLogicAutomation.Rules(oCurrentDoc)
+ 	    # Autodesk.iLogic.Automation.iLogicAutomation _iLogicAutomation =
+
+ 	    #     (Autodesk.iLogic.Automation.iLogicAutomation)addin.Automation;
+	# mod = gencache.EnsureModule('{D98A091D-3A0F-4C3E-B36E-61F62068D488}', 0, 1, 0)
+	# oApp = mod.Application(oApp)
+
 	if frame_input_form.is_valid():
 		print frame_input_form
 		# save data
@@ -104,21 +139,6 @@ def calculator_home(request):
 
 		# update CAD
 
-		# oApp = win32com.client.Dispatch('Inventor.Application')
-		# oApp.Visible = True
-		# mod = gencache.EnsureModule('{D98A091D-3A0F-4C3E-B36E-61F62068D488}', 0, 1, 0)
-		# oApp = mod.Application(oApp)
-		# oApp.SilentOperation = True
-		# oDoc = oApp.ActiveDocument
-		# prop = oApp.ActiveDocument.PropertySets.Item("Design Tracking Properties")
-
-		# # getting description and designer from iproperties (works)
-		# Descrip = prop('Description').Value
-		# Designer = prop('Designer').Value
-		# print(Descrip)
-		# print(Designer)
-
-		# oAssDoc = oApp.Documents.Open('someassemblyfile.iam')
 		# ThisApplication.ActiveView.Update()
 		# save it
 
