@@ -4,7 +4,7 @@ from django.db import models
 from django.core.validators import MinValueValidator
 import datetime
 
-# Contact.
+# Contact form.SQL table 
 class Contact(models.Model):
 	pub_date = models.DateTimeField(default = datetime.datetime.now())
 	name = models.CharField(max_length = 50)
@@ -15,7 +15,7 @@ class Contact(models.Model):
 	def __unicode__ (self):
 			return self.name
 
-# Frame dimensions.
+# Frame dimensions.SQL table
 class FrameDimensions(models.Model):
 	pub_date = models.DateTimeField(default = datetime.datetime.now())
 
