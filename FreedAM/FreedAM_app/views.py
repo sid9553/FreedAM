@@ -68,7 +68,6 @@ def calculator_home(request):
 	template = loader.get_template('FreedAM_app/templates/FreedAM_app/calculator_home.html')
 	# load input form 
 	frame_input_form = FrameDimensionsForm(request.POST or None)
-
 	#initialize pythoncom to allow connection to Inventor
 	pythoncom.CoInitialize()	
 	# Open Inventor
@@ -83,12 +82,12 @@ def calculator_home(request):
 	# Set location of assembly
 	Assembly_name = 'C:/Users/asidawi/Desktop/CAD_testing/Frame_assembly - Working_on_constraints.iam'
 
-	# Open the model
-	oDoc = invApp.Documents.Open(Assembly_name)
-
 	# if the form is valid i.e. has no clear input errors
 	if frame_input_form.is_valid():
-		
+
+		# Open the model
+		oDoc = invApp.Documents.Open(Assembly_name)		
+
 		# get latest object created id - THIS IS NOT ROBUST!!!!!!!!!!!!!!!!!!!!!!!!
 		object_created_id = FrameDimensions.objects.order_by('-pub_date')[0].id
 		
@@ -122,8 +121,20 @@ def calculator_home(request):
 		ws['B2'] = frame_input_form.cleaned_data['angle_lower_leg_upper_leg']
 		ws['B3'] = frame_input_form.cleaned_data['seating_angle']
 		ws['B4'] = frame_input_form.cleaned_data['backrest_angle']
-		ws['B5'] = frame_input_form.cleaned_data['shoulder_height'] - frame_input_form.cleaned_data['seat_height']
-		ws['B6'] = frame_input_form.cleaned_data['seat_depth']
+
+		# use standard upholstery sizes and compare backrest width and length to that (6 standard sizes)
+		# 400x400, 400x450, 400x500, 450x550, 450x600
+		backrest_tube_length = frame_input_form.cleaned_data['shoulder_height'] - frame_input_form.cleaned_data['seat_height']
+		if backrest_tube_length < 400:
+			ws['B5'] = 425
+		elif 400 <  backrest_tube_length < 450:
+			ws['B5'] = 475
+		elif 450 <  backrest_tube_length < 500:
+			ws['B5'] = 525		
+		elif 500 <  backrest_tube_length < 550:
+			ws['B5'] = 575					
+		else:
+			ws['B5'] = 625	
 
 		# calculate whether vertical tubes need to be extended 
 		seat_height = frame_input_form.cleaned_data['seat_height']
@@ -147,34 +158,60 @@ def calculator_home(request):
 		# setting remainder spredsheet values from form inputs
 		ws['B7'] = vertical_tube_length_front
 		ws['B8'] = vertical_tube_length_rear
-		ws['B9'] = frame_input_form.cleaned_data['seat_depth']		
+
+		# use standard upholstery sizes and compare seat width and length to that (6 standard sizes)
+		# 400x400, 400x450, 400x500, 450x550, 450x600
+
+		if frame_input_form.cleaned_data['seat_depth'] < 400:
+			ws['B9'] = 400
+			ws['B6'] = 400			
+		elif 400 <  frame_input_form.cleaned_data['seat_depth'] < 450:
+			ws['B9'] = 450
+			ws['B6'] = 450						
+		elif 450 <  frame_input_form.cleaned_data['seat_depth'] < 500:
+			ws['B9'] = 500	
+			ws['B6'] = 500							
+		elif 500 <  frame_input_form.cleaned_data['seat_depth'] < 550:
+			ws['B9'] = 550
+			ws['B6'] = 550											
+		else:
+			ws['B9'] = 600	
+			ws['B6'] = 600			
+
+
 		ws['B10'] = frame_input_form.cleaned_data['seat_width']/2 - 25
 		ws['B11'] = frame_input_form.cleaned_data['seat_width']/2 - 25
-		ws['B14'] = frame_input_form.cleaned_data['seat_width']
+
+		if frame_input_form.cleaned_data['seat_width'] < 400:
+			ws['B14'] = 400
+		elif 400 <  frame_input_form.cleaned_data['seat_width'] < 450:
+			ws['B14'] = 450
+		else:
+			ws['B14'] = 450		
 
 		# save parameters spreadsheet
 		wb.save('Parameters.xlsx')	
 
+		# iLogic GUID
+		iLogicAddinGuid = "{3BDD8D79-2179-4B11-8A5A-257B1C0263AC}"
+		# load iLogic add-in
+		iLogic_addin = invApp.ApplicationAddIns.ItemById(iLogicAddinGuid)
 
-		# # iLogic GUID
-		# iLogicAddinGuid = "{3BDD8D79-2179-4B11-8A5A-257B1C0263AC}"
-		# # load iLogic add-in
-		# iLogic_addin = invApp.ApplicationAddIns.ItemById(iLogicAddinGuid)
-		# # Activate the add-in
-		# iLogic_addin.Activate()
+		iLogicAutomation = iLogic_addin.Automation()
 
-		# _iLogicAutomation = iLogic_addin.Automation()
-
-		# Access the iLogic rules within the model
-		#rules = iLogic_addin.Rules(invApp)
+		#rules = iLogicAutomation.get_Rules(oDoc)
 
 		# Update assembly
 		oDoc.Update()
 		# Save assembly
 		oDoc.Save()
 
-		# Save as STL (needs testing)
-		# oDoc.SaveAs("joint_name.stl", True)
+		#backrest_joint = 'C:/Users/asidawi/Desktop/CAD_testing/Backrest_joint.ipt'
+
+		#oDoc_bj = invApp.Documents.Open(backrest_joint)		
+
+		# Save joints as STL (needs testing)
+		#oDoc_bj.SaveAs("backrest_joint_"+str(object_created_id)+".stl", True)
 
 		os.chdir("C:/Users/asidawi/Documents/FreedAM/FreedAM/FreedAM_app/static/images")	
 
@@ -210,8 +247,6 @@ def calculator_home(request):
 		new_accessories_object = Accessories(pub_date = datetime.datetime.now(), linked_frame = FrameDimensions.objects.get(id =object_created_id))
 		new_accessories_object.save()
 
-# use standard upholstery sizes and compared seat width and length to that (6 standard sizes)
-# 400x400, 400x450, 400x500, 450x550, 450x600
 
 		return redirect("FreedAM_app:frame_preview", object_created_id)
 	else:
@@ -225,10 +260,6 @@ def calculator_home(request):
 	}
 	return HttpResponse(template.render(context, request))	
 
-
-
-
- # WHAT HAPPENS NEXT? Cushioning and accessory options with preview of chair?
 
 def frame_preview(request, id=None):
 	template = loader.get_template('FreedAM_app/templates/FreedAM_app/frame_preview.html')
