@@ -19,7 +19,7 @@ class Contact(models.Model):
 class FrameDimensions(models.Model):
 	pub_date = models.DateTimeField(default = datetime.datetime.now())
 
-	angle_lower_leg_upper_leg = models.IntegerField()
+	angle_lower_leg_upper_leg = models.IntegerField(verbose_name = "Angle of footrest position to seat")
 	backrest_angle = models.IntegerField()	
 	# should be between 90 and 105
 	seating_angle = models.IntegerField()	
@@ -35,5 +35,18 @@ class FrameDimensions(models.Model):
 	# back wheel boolean
 	class Meta:
 		verbose_name ="Frame dimensions"
+	def __int__ (self):
+			return self.id			
+
+# Accessory choices SQL table
+class Accessories(models.Model):
+	pub_date = models.DateTimeField(default = datetime.datetime.now())
+	linked_frame = models.ForeignKey(FrameDimensions)
+	CHOICES = (("Comfort Basic", "Comfort Basic"), ("Comfort Gel", "Comfort Gel"), ("Comfort Foam", 'Comfort Foam'), ("Memory Foam", 'Memory Foam'),("Luxury Fleece", 'Luxury Fleece'),)
+	cushion_type = models.CharField(max_length=16, choices = CHOICES, default="1")	
+	STORAGE_CHOICES = (("Utility bag", "Utility bag"), ("Horizontal utility bag", "Horizontal utility bag"), ("Side pouch", 'Side pouch'))
+	storage = models.CharField(max_length=16, choices = STORAGE_CHOICES, default="1")
+	class Meta:
+		verbose_name ="Chair Accessories"
 	def __str__ (self):
-			return self.pub_date			
+			return self.linked_frame	

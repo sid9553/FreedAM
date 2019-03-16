@@ -4,13 +4,53 @@
 {% block pagetitle %}FreedAM{% endblock pagetitle %}
 
 {% block content %}
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Select a chair type</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card-group">
+          <div class="card">
+            <img class="card-img-top" src="{% static '/images/Premium_chair_1st_version.PNG' %}" alt="Card image cap">
+            <div class="card-body">
+              <a href="{% url 'FreedAM_app:calculator_home' %}">
+                <h5 class="card-title">Lightweight</h5>
+                <p class="card-text">The FreedAM top of the range lightweight chair made of carbon fibre and titanium.</p>
+              </a>
+            </div>
+          </div>
+          <div class="card">
+            <img class="card-img-top" src="{% static '/images/FreedAM_everyday_chair.PNG' %}" alt="Card image cap">
+            <div class="card-body">
+              <a href="{% url 'FreedAM_app:calculator_home' %}">
+                <h5 class="card-title">Everyday</h5>
+                <p class="card-text">A standard rugged wheelchair for everyday use. Features an aluminium frame that's made for you.</p>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
   <!-- Header -->
     <header class="masthead" >
       <div class="container d-flex h-100 align-items-center">
         <div class="text-center float-left">
           <h1 class="mx-auto my-0 text-dark">FreedAM</h1>
           <h2 class="text-white-50 mx-auto mt-2 mb-5">Welcome to a whole new world</h2>
-          <a href="#about" class="btn btn-primary js-scroll-trigger">Get Started</a>
+          <a data-toggle="modal" data-target="#exampleModalCenter" class="btn btn-primary js-scroll-trigger">Get Started</a>
         </div>
       </div>
     </header>
@@ -22,8 +62,8 @@
           <div class="col-lg-8 mx-auto">
             <h2 class="text-white mb-4">Make it your own</h2>
             <p class="text-white-50">FreedAM creates a chair that fits you, for you.</p>
-            <img src="{% static '/images/DpJcpWCXUAUuSAU.jpg' %}" class="img-fluid" alt="">            
-          </div>
+<!--             <img src="{% static '/images/DpJcpWCXUAUuSAU.jpg' %}" class="img-fluid" alt="">            
+ -->          </div>
         </div>
       </div>
     </section>

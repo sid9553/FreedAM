@@ -15,7 +15,6 @@
     <link rel="stylesheet" type="text/css" href="{% static '/css/grayscale.min.css' %}">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
-
     {% block head %}
     
     {% endblock head %}    
@@ -36,7 +35,7 @@
               <a class="nav-link" href="{% url 'FreedAM_app:home' %}">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#projects">The FreedAM Project</a>
+              <a class="nav-link js-scroll-trigger" href="{% url 'FreedAM_app:FreedAM_project' %}">The FreedAM Project</a>
             </li>
             <li class="nav-item">
               <a class="nav-link js-scroll-trigger" href="{% url 'FreedAM_app:calculator_home' %}">FreedAM Calculator</a>

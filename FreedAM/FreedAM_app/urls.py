@@ -6,6 +6,7 @@ from .views import *
 urlpatterns = [
 	url(r'^$', views.home, name='home'),
 	url(r'^calculator_home/$', views.calculator_home, name='calculator_home'),
+	url(r'^FreedAM_project/$', views.FreedAM_project, name='FreedAM_project'),
 	url(r'^(?P<id>[\w-]+)/frame_preview/$', views.frame_preview, name='frame_preview'),
 	#url(r'^partrequestinfo/$', views.partrequestinfo, name='partrequestinfo'),
 

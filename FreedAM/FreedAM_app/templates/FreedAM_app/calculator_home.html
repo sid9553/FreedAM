@@ -1,7 +1,7 @@
 {% extends 'FreedAM_app/templates/FreedAM_app/base.html' %}
 
 {% load static %}
-{% block pagetitle %}FreedAM{% endblock pagetitle %}
+{% block pagetitle %}FreedAM Calculator{% endblock pagetitle %}
 
 {% block content %}
 
@@ -15,27 +15,42 @@
     </header> -->
 
 <center>
+  <p></p><br>
+    <p></p><br>
+
   <h1 class="mx-auto my-0 text-dark">FreedAM Calculator</h1>
-    <section id="form" class="mt-5">
-      <div class="container">
-      	<h2>Enter some measurements to get started</h2>
-          {{form_errors}}
-          {{ frame_input_form.non_field_errors }}
-          {{ frame_input_form.field_name.errors }}                    
-          {{ frame_input_form.errors }} 
-          {{ frame_input_form.id }} 
-            {% for hidden in frame_input_form.hidden_fields %}
-                {{ hidden }}
-            {% endfor %}           
-        	<form method = 'POST' action="{% url 'FreedAM_app:calculator_home' %}"  enctype="multipart/form-data">{% csrf_token %}
-        		<table class="table">
-        			{{frame_input_form.as_table}}
-        		</table>
-        	<input type="submit" class="btn btn-success">
-        	</form>
+      <div class="card-group">
+
+        <div class="card">
+            <img style="max-height:1000px;max-width: 500px" src="{% static '/images/cute-happy-young-man-wheelchair-isolated-white-background-smiling-male-character-physical-disability-impairment-131482717_front.jpg' %}" class="card-img">
+            <img style="max-height:1000px;max-width: 500px" src="{% static '/images/cute-happy-young-man-wheelchair-isolated-white-background-smiling-male-character-physical-disability-impairment-131482717_side.jpg' %}" class="card-img">            
+        </div>
+
+        <div class="card">
+          <h2>Enter some measurements to get started</h2>
+          <br>
+            <error>{{form_errors}}</error>
+            {{ frame_input_form.non_field_errors }}
+            {{ frame_input_form.field_name.errors }}                    
+            {{ frame_input_form.errors }} 
+            {{ frame_input_form.id }} 
+              {% for hidden in frame_input_form.hidden_fields %}
+                  {{ hidden }}
+              {% endfor %}    
+            <section id="form" class="mt-5">
+
+              <form method = 'POST' action="{% url 'FreedAM_app:calculator_home' %}"  enctype="multipart/form-data">{% csrf_token %}
+                <table class="table">
+                  {{frame_input_form.as_table}}
+                </table>
+               <input type="submit" id="submit_button" class="btn btn-success">
+              </form>
+
+            </section>
+
+        </div>   
 
       </div>
-    </section>
 </center>
 {% endblock content %}
 {% block bottom %}
@@ -49,7 +64,7 @@
 </script>
 <script type="text/javascript">
 $(document).ready(function() { 
-    $(".errorlist" ).each(function( i ) {
+    $("error" ).each(function( i ) {
   console.log(this)
      this.style.color = "red";
      this.style.fontWeight = "bold";      
@@ -72,7 +87,13 @@ $(document).ready(function() {
             }
         }
         return cookieValue; 
-                }          
+                }     
+
+    $("input").hover(function( i ) {
+          $(this).parent().css("fontWeight", 800)
+      });        
+                    
 });
+
 </script>
 {% endblock bottom %}
