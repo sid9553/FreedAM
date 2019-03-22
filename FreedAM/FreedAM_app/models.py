@@ -18,7 +18,7 @@ class Contact(models.Model):
 # Frame dimensions.SQL table
 class FrameDimensions(models.Model):
 	pub_date = models.DateTimeField(default = datetime.datetime.now())
-
+	your_name = models.CharField(max_length=250, default = "Your nickname")
 	angle_lower_leg_upper_leg = models.IntegerField(verbose_name = "Angle of footrest position to seat")
 	backrest_angle = models.IntegerField()	
 	# should be between 90 and 105

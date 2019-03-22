@@ -39,6 +39,7 @@ from PIL import Image
 import pywinauto
 import re
 import win32con
+import time
 
 # Create your views here.
 
@@ -89,7 +90,7 @@ def calculator_home(request):
 		oDoc = invApp.Documents.Open(Assembly_name)		
 
 		# get latest object created id - THIS IS NOT ROBUST!!!!!!!!!!!!!!!!!!!!!!!!
-		object_created_id = FrameDimensions.objects.order_by('-pub_date')[0].id
+		object_created_id = FrameDimensions.objects.order_by('-id')[0].id
 		
 		if frame_input_form.cleaned_data['angle_lower_leg_upper_leg'] > 105 or frame_input_form.cleaned_data['angle_lower_leg_upper_leg'] < 85:
 			form_errors = "Please ensure that angles are greater than 85 or less than 105 degrees"
@@ -125,17 +126,20 @@ def calculator_home(request):
 		# use standard upholstery sizes and compare backrest width and length to that (6 standard sizes)
 		# 400x400, 400x450, 400x500, 450x550, 450x600
 		backrest_tube_length = frame_input_form.cleaned_data['shoulder_height'] - frame_input_form.cleaned_data['seat_height']
-		if backrest_tube_length < 400:
+		
+		if backrest_tube_length <= 400:
 			ws['B5'] = 425
-		elif 400 <  backrest_tube_length < 450:
+		elif 401 <=  backrest_tube_length <= 450:
 			ws['B5'] = 475
-		elif 450 <  backrest_tube_length < 500:
+		elif 451 <=  backrest_tube_length <= 500:
 			ws['B5'] = 525		
-		elif 500 <  backrest_tube_length < 550:
+		elif 501 <=  backrest_tube_length <= 550:
 			ws['B5'] = 575					
 		else:
 			ws['B5'] = 625	
 
+		print ws['B5']
+			
 		# calculate whether vertical tubes need to be extended 
 		seat_height = frame_input_form.cleaned_data['seat_height']
 		vertical_tube_length_rear = seat_height - 300
@@ -162,16 +166,19 @@ def calculator_home(request):
 		# use standard upholstery sizes and compare seat width and length to that (6 standard sizes)
 		# 400x400, 400x450, 400x500, 450x550, 450x600
 
-		if frame_input_form.cleaned_data['seat_depth'] < 400:
+		print frame_input_form.cleaned_data['seat_depth']
+		print frame_input_form.cleaned_data['seat_width']
+
+		if frame_input_form.cleaned_data['seat_depth'] <= 400:
 			ws['B9'] = 400
 			ws['B6'] = 400			
-		elif 400 <  frame_input_form.cleaned_data['seat_depth'] < 450:
+		elif 401 <=  frame_input_form.cleaned_data['seat_depth'] <= 450:
 			ws['B9'] = 450
 			ws['B6'] = 450						
-		elif 450 <  frame_input_form.cleaned_data['seat_depth'] < 500:
+		elif 451 <=  frame_input_form.cleaned_data['seat_depth'] <= 500:
 			ws['B9'] = 500	
 			ws['B6'] = 500							
-		elif 500 <  frame_input_form.cleaned_data['seat_depth'] < 550:
+		elif 501 <=  frame_input_form.cleaned_data['seat_depth'] <= 550:
 			ws['B9'] = 550
 			ws['B6'] = 550											
 		else:
@@ -182,12 +189,12 @@ def calculator_home(request):
 		ws['B10'] = frame_input_form.cleaned_data['seat_width']/2 - 25
 		ws['B11'] = frame_input_form.cleaned_data['seat_width']/2 - 25
 
-		if frame_input_form.cleaned_data['seat_width'] < 400:
+		if frame_input_form.cleaned_data['seat_width'] <= 400:
 			ws['B14'] = 400
-		elif 400 <  frame_input_form.cleaned_data['seat_width'] < 450:
+		elif 401 <=  frame_input_form.cleaned_data['seat_width'] <= 450:
 			ws['B14'] = 450
 		else:
-			ws['B14'] = 450		
+			ws['B14'] = 500		
 
 		# save parameters spreadsheet
 		wb.save('Parameters.xlsx')	
@@ -198,13 +205,22 @@ def calculator_home(request):
 		iLogic_addin = invApp.ApplicationAddIns.ItemById(iLogicAddinGuid)
 
 		iLogicAutomation = iLogic_addin.Automation()
+		# Update assembly
+		oDoc.Update()
 
-		#rules = iLogicAutomation.get_Rules(oDoc)
+		time.sleep(5)
 
 		# Update assembly
 		oDoc.Update()
+
+		time.sleep(10)
+
+		oDoc.Update()
+
 		# Save assembly
 		oDoc.Save()
+
+		#rules = iLogicAutomation.get_Rules(oDoc)
 
 		#backrest_joint = 'C:/Users/asidawi/Desktop/CAD_testing/Backrest_joint.ipt'
 
@@ -237,7 +253,7 @@ def calculator_home(request):
 		im.crop((500, 150, 1500, 980)).save("FreedAM_"+str(object_created_id)+"_front.jpg")
 
 		# Iso_view = invApp.CommandManager.ControlDefinitions.Item("AppIsometricViewCmd").Execute()
-
+		win32gui.ShowWindow(7346022, win32con.SW_MAXIMIZE)				
 		win32gui.ShowWindow(7346022, win32con.SW_MINIMIZE)				
 
 		# save frame input form data to database
@@ -265,6 +281,7 @@ def frame_preview(request, id=None):
 	template = loader.get_template('FreedAM_app/templates/FreedAM_app/frame_preview.html')
 	# load measurements
 	measurements = FrameDimensions.objects.get(id=id)
+	print measurements
 	front_image_location = '/static/images/FreedAM_'+str(id)+'_front.jpg'
 	right_image_location = '/static/images/FreedAM_'+str(id)+'_right.jpg'
 
@@ -275,7 +292,7 @@ def frame_preview(request, id=None):
 
 	# load preview image
 	context = {
-	   'frame_input_form': measurements, 'front_image_location': front_image_location, 'right_image_location': right_image_location, 'accessories_form': accessories_form
+	   'measurements': measurements, 'front_image_location': front_image_location, 'right_image_location': right_image_location, 'accessories_form': accessories_form
 	}
 	return HttpResponse(template.render(context, request))	
 	#return render(request, "buildpage/add_note.html", context)
