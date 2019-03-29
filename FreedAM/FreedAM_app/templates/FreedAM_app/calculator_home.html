@@ -5,22 +5,17 @@
 
 {% block content %}
 
-<!--     <header class="masthead mb-3" style="background-image: url('/static/images/kuschchamp_cv01_alu-85-frame-ivory-white-with-cps-artic-blue_18804981726_o.jpg')">
-      <div class="container d-flex h-100 align-items-center">
-        <div class="text-center float-left">
-          <h1 class="mx-auto my-0 text-dark">FreedAM Calculator</h1>
-          <a href="#form" class="btn btn-primary js-scroll-trigger">Get Started</a>
-        </div>
-      </div>
-    </header> -->
-
 <center>
   <p></p><br>
     <p></p><br>
 
-  <h1 class="mx-auto my-0 text-dark">FreedAM Calculator</h1>
+<!--     title at top of page -->  
+    <h1 class="mx-auto my-0 text-dark">FreedAM Calculator</h1>
+
+<!--  group of cards -->      
       <div class="card-group">
 
+        
         <div class="card">
             <img style="max-height:1000px;max-width: 500px" src="{% static '/images/cute-happy-young-man-wheelchair-isolated-white-background-smiling-male-character-physical-disability-impairment-131482717_front.jpg' %}" class="card-img">
             <img style="max-height:1000px;max-width: 500px" src="{% static '/images/cute-happy-young-man-wheelchair-isolated-white-background-smiling-male-character-physical-disability-impairment-131482717_side.jpg' %}" class="card-img">            
@@ -64,15 +59,18 @@
 </script>
 <script type="text/javascript">
 $(document).ready(function() { 
+  // for each error message make text bold and red
     $("error" ).each(function( i ) {
   console.log(this)
      this.style.color = "red";
      this.style.fontWeight = "bold";      
       });  
+    // test csrf safety
         function csrfSafeMethod(method) {
         // these HTTP methods do not require CSRF protection
         return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
     }
+    //get cookie for csrf token
         function getCookie(name) {
         var cookieValue = null;
         if (document.cookie && document.cookie != '') {
@@ -89,6 +87,7 @@ $(document).ready(function() {
         return cookieValue; 
                 }     
 
+    // for all input fields make help text bold when hovered over
     $("input").hover(function( i ) {
           $(this).parent().css("fontWeight", 800)
       });        
