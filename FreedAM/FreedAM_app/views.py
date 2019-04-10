@@ -103,8 +103,8 @@ def calculator_home(request):
 			form_errors = "Please ensure that seat depth is between 400 and 500mm"
 			context = {'form_errors': form_errors, 'frame_input_form': frame_input_form}
 			return HttpResponse(template.render(context, request))	
-		# seat width between 400 and 600mm due to same reason as above
-		if frame_input_form.cleaned_data['seat_width'] > 600 or frame_input_form.cleaned_data['seat_depth'] < 400:
+		# seat width between 400 and 600mm due to same reason as above and to prevent footrest parts touching
+		if frame_input_form.cleaned_data['seat_width'] > 600 or frame_input_form.cleaned_data['seat_width'] < 400:
 			form_errors = "Please ensure that seat width is between 400 and 600mm"
 			context = {'form_errors': form_errors, 'frame_input_form': frame_input_form}
 			return HttpResponse(template.render(context, request))	
